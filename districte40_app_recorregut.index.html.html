@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Districte 4.0 — App Recorregut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#E30613;--red-dark:#b30510;--red-light:#ffeaeb;
+  --black:#0a0a0a;--dark:#1a1a1a;
+  --white:#ffffff;--off:#f7f6f4;--light:#f0efed;
+  --gray:#6b6b6b;--gray-lt:#e2e1df;--gray-md:#c4c3c1;
+  --font-d:'Barlow Condensed',sans-serif;
+  --font-b:'Barlow',sans-serif;
+  --r:12px;--rs:8px;
+}
+html,body{width:100%;height:100%;background:#e8e7e5;font-family:var(--font-b);overflow:hidden;}
+
+/* PHONE SHELL */
+.shell{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#d8d7d5 0%,#e8e7e5 100%);
+}
+.phone{
+  width:390px;height:844px;
+  background:var(--white);
+  border-radius:52px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.22),0 0 0 10px #1a1a1a,0 0 0 12px #2a2a2a,inset 0 0 0 1px rgba(255,255,255,0.1);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* Notch */
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:126px;height:34px;background:#1a1a1a;border-radius:0 0 20px 20px;
+  z-index:200;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#0a0a0a;border:1px solid #333;}
+.notch-sensor{width:30px;height:4px;border-radius:2px;background:#0a0a0a;}
+
+/* STATUS BAR */
+.status-bar{
+  height:44px;padding:12px 24px 0;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:10;background:transparent;flex-shrink:0;
+}
+.status-time{font-family:var(--font-d);font-weight:700;font-size:15px;color:var(--black);letter-spacing:0.02em;}
+.status-icons{display:flex;align-items:center;gap:4px;}
+.status-icons svg{color:var(--black);}
+
+/* SCREEN CONTAINER */
+.screen-wrap{flex:1;position:relative;overflow:hidden;}
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s ease,transform 0.28s ease;
+  transform:translateX(40px);
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.exit{opacity:0;transform:translateX(-40px);}
+
+/* HOME BAR */
+.home-bar{
+  height:34px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--white);
+}
+.home-bar-line{width:134px;height:5px;background:#1a1a1a;border-radius:3px;opacity:0.2;}
+
+/* ─── SCREEN 0: SPLASH ─── */
+#s0{background:var(--dark);justify-content:center;align-items:center;}
+#s0 .home-bar{background:var(--dark);}
+#s0 .home-bar-line{background:white;}
+.splash-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(227,6,19,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(227,6,19,0.07) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.splash-inner{position:relative;z-index:2;text-align:center;padding:2rem;}
+.splash-logo-wrap{margin-bottom:2rem;}
+.splash-logo-box{
+  width:80px;height:80px;background:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1rem;
+}
+.splash-logo-text{
+  font-family:var(--font-d);font-weight:800;font-size:2.4rem;
+  color:white;letter-spacing:-0.04em;line-height:1;
+}
+.splash-title{
+  font-family:var(--font-d);font-weight:800;font-size:2.6rem;
+  color:white;text-transform:uppercase;letter-spacing:-0.02em;line-height:0.95;
+  margin-bottom:1rem;
+}
+.splash-title span{color:var(--red);}
+.splash-sub{font-size:14px;color:#888;line-height:1.6;margin-bottom:2.5rem;max-width:260px;margin-left:auto;margin-right:auto;}
+.btn-splash{
+  background:var(--red);color:white;border:none;
+  width:100%;padding:16px;
+  font-family:var(--font-d);font-weight:700;font-size:17px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;border-radius:var(--rs);
+  transition:background 0.2s,transform 0.1s;
+}
+.btn-splash:active{background:var(--red-dark);transform:scale(0.98);}
+.splash-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:2rem;}
+.splash-tag{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  color:#aaa;font-size:11px;padding:4px 10px;border-radius:99px;
+}
+
+/* ─── SCREEN 1: MAP ─── */
+#s1{background:var(--off);}
+.map-topbar{
+  background:var(--white);padding:10px 16px 10px;
+  border-bottom:1px solid var(--gray-lt);flex-shrink:0;
+}
+.map-topbar-row1{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.map-topbar-logo{
+  width:28px;height:28px;background:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-weight:800;font-size:12px;color:white;border-radius:4px;
+}
+.map-topbar-title{font-family:var(--font-d);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;color:var(--black);}
+.map-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--light);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:8px 12px;
+}
+.map-search input{
+  border:none;background:transparent;font-size:13px;color:var(--black);
+  font-family:var(--font-b);width:100%;outline:none;
+}
+.map-search input::placeholder{color:var(--gray-md);}
+
+/* MAP CANVAS */
+.map-canvas{flex:1;position:relative;overflow:hidden;background:#eae9e4;}
+
+/* Streets / grid lines */
+.map-svg{position:absolute;inset:0;width:100%;height:100%;}
+
+/* Company pins */
+.pin{
+  position:absolute;transform:translate(-50%,-100%);
+  display:flex;flex-direction:column;align-items:center;
+  cursor:pointer;z-index:10;
+  transition:transform 0.15s;
+}
+.pin:active{transform:translate(-50%,-100%) scale(0.92);}
+.pin-bubble{
+  background:var(--white);border:2px solid var(--red);
+  border-radius:var(--rs);padding:5px 9px;
+  font-family:var(--font-d);font-weight:700;font-size:11px;
+  color:var(--black);text-transform:uppercase;letter-spacing:0.04em;
+  white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.pin-bubble.sector{background:var(--red);color:white;border-color:var(--red);font-size:10px;}
+.pin-dot{
+  width:10px;height:10px;background:var(--red);border-radius:50%;
+  border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.2);
+  margin-top:-1px;
+}
+.pin:hover .pin-bubble{background:var(--red);color:white;}
+.pin.active-pin .pin-bubble{background:var(--red);color:white;}
+
+/* Sector labels on map */
+.sector-label{
+  position:absolute;font-family:var(--font-d);font-weight:600;font-size:10px;
+  color:rgba(0,0,0,0.25);text-transform:uppercase;letter-spacing:0.12em;
+  pointer-events:none;
+}
+
+/* LEGEND */
+.map-legend{
+  position:absolute;bottom:12px;left:12px;
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:10px 12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  font-size:11px;
+}
+.legend-title{font-weight:600;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:6px;}
+.legend-row{display:flex;align-items:center;gap:6px;color:var(--dark);margin-bottom:4px;font-size:11px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* FILTER PILLS */
+.map-filters{
+  position:absolute;top:8px;left:0;right:0;padding:0 12px;
+  display:flex;gap:6px;overflow-x:auto;
+  scrollbar-width:none;
+}
+.map-filters::-webkit-scrollbar{display:none;}
+.filter-pill{
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:99px;padding:5px 12px;
+  font-size:11px;font-weight:600;color:var(--gray);
+  white-space:nowrap;cursor:pointer;
+  transition:all 0.15s;flex-shrink:0;
+}
+.filter-pill.active{background:var(--red);border-color:var(--red);color:white;}
+
+/* ─── SCREEN 2: EMPRESA ─── */
+#s2{background:var(--off);}
+.empresa-topbar{
+  background:var(--white);padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--gray-lt);flex-shrink:0;
+}
+.back-btn{
+  width:32px;height:32px;background:var(--light);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:none;transition:background 0.15s;flex-shrink:0;
+}
+.back-btn:active{background:var(--gray-lt);}
+.empresa-topbar-title{font-family:var(--font-d);font-weight:700;font-size:15px;text-transform:uppercase;color:var(--black);letter-spacing:0.03em;}
+.empresa-scroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.empresa-scroll::-webkit-scrollbar{display:none;}
+.empresa-hero{
+  background:var(--dark);height:140px;position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;padding:1rem;flex-shrink:0;
+}
+.empresa-hero-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(227,6,19,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(227,6,19,0.08) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.empresa-hero-logo{
+  position:relative;z-index:2;
+  background:var(--red);padding:6px 12px;
+  font-family:var(--font-d);font-weight:800;font-size:1.4rem;
+  text-transform:uppercase;color:white;letter-spacing:0.02em;
+}
+.empresa-sector-badge{
+  position:absolute;top:12px;right:12px;z-index:2;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:white;font-size:10px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;padding:4px 10px;border-radius:99px;
+}
+.empresa-body{padding:1.2rem;}
+.empresa-name{
+  font-family:var(--font-d);font-weight:800;font-size:1.6rem;
+  text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:4px;color:var(--black);
+}
+.empresa-tagline{font-size:13px;color:var(--gray);margin-bottom:1rem;line-height:1.5;}
+.empresa-desc{font-size:13px;color:#444;line-height:1.65;margin-bottom:1.2rem;}
+.empresa-info-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.2rem;
+}
+.info-chip{
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:10px 12px;
+}
+.info-chip-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-md);margin-bottom:3px;}
+.info-chip-val{font-size:13px;font-weight:600;color:var(--black);}
+.empresa-section-title{
+  font-family:var(--font-d);font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:0.06em;color:var(--black);
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.empresa-section-title::after{content:'';flex:1;height:1px;background:var(--gray-lt);}
+.oport-card{
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--r);padding:1rem;margin-bottom:8px;
+  cursor:pointer;transition:border-color 0.15s,transform 0.1s;
+}
+.oport-card:active{transform:scale(0.98);}
+.oport-card:hover{border-color:var(--red);}
+.oport-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.oport-type{
+  font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--red-light);color:var(--red-dark);border-radius:99px;padding:3px 9px;
+}
+.oport-deadline{font-size:11px;color:var(--gray);}
+.oport-title{font-weight:600;font-size:13px;color:var(--black);margin-bottom:4px;}
+.oport-desc{font-size:12px;color:var(--gray);line-height:1.5;}
+.oport-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.oport-tag{
+  font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;
+  background:var(--light);color:var(--gray);letter-spacing:0.05em;
+}
+.btn-empresa{
+  width:100%;background:var(--red);color:white;border:none;
+  padding:14px;border-radius:var(--rs);
+  font-family:var(--font-d);font-weight:700;font-size:16px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;margin-top:1rem;
+  transition:background 0.15s,transform 0.1s;
+}
+.btn-empresa:active{background:var(--red-dark);transform:scale(0.98);}
+
+/* ─── SCREEN 3: OPORTUNITAT ─── */
+#s3{background:var(--off);}
+.oport-topbar{
+  background:var(--white);padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--gray-lt);flex-shrink:0;
+}
+.oport-scroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.oport-scroll::-webkit-scrollbar{display:none;}
+.oport-hero{
+  background:var(--red);padding:1.5rem;flex-shrink:0;
+}
+.oport-hero-type{
+  display:inline-block;background:rgba(255,255,255,0.2);
+  color:white;font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-bottom:10px;
+}
+.oport-hero-title{
+  font-family:var(--font-d);font-weight:800;font-size:1.6rem;
+  text-transform:uppercase;color:white;letter-spacing:-0.01em;line-height:1.05;
+  margin-bottom:6px;
+}
+.oport-hero-company{font-size:13px;color:rgba(255,255,255,0.75);}
+.oport-body{padding:1.2rem;}
+.oport-stat-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.2rem;
+}
+.oport-stat{
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:10px;text-align:center;
+}
+.oport-stat-val{font-family:var(--font-d);font-weight:700;font-size:1.1rem;color:var(--red);}
+.oport-stat-lab{font-size:10px;color:var(--gray);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+.oport-desc-block{
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--r);padding:1rem;margin-bottom:1rem;
+}
+.oport-desc-block h4{
+  font-family:var(--font-d);font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:0.08em;color:var(--black);margin-bottom:8px;
+}
+.oport-desc-block p{font-size:13px;color:#555;line-height:1.65;}
+.oport-desc-block ul{padding-left:1.2rem;margin-top:4px;}
+.oport-desc-block li{font-size:13px;color:#555;line-height:1.8;}
+.skill-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.skill-chip{
+  background:var(--light);border:1px solid var(--gray-lt);
+  border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--dark);
+}
+.btn-apply{
+  width:100%;background:var(--red);color:white;border:none;
+  padding:16px;border-radius:var(--rs);
+  font-family:var(--font-d);font-weight:700;font-size:17px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;margin-top:0.5rem;
+  transition:background 0.15s,transform 0.1s;
+}
+.btn-apply:active{background:var(--red-dark);transform:scale(0.98);}
+
+/* ─── SCREEN 4: FORMULARI ─── */
+#s4{background:var(--off);}
+.form-topbar{
+  background:var(--white);padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--gray-lt);flex-shrink:0;
+}
+.form-scroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.form-scroll::-webkit-scrollbar{display:none;}
+.form-inner{padding:1.2rem;}
+.form-banner{
+  background:var(--red);border-radius:var(--rs);padding:1rem 1.2rem;
+  margin-bottom:1.2rem;
+}
+.form-banner-company{font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:2px;}
+.form-banner-title{font-family:var(--font-d);font-weight:700;font-size:1.1rem;text-transform:uppercase;color:white;letter-spacing:0.02em;}
+.app-label{display:block;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:5px;}
+.app-input{
+  width:100%;background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:12px 14px;
+  font-family:var(--font-b);font-size:14px;color:var(--black);
+  outline:none;transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+.app-input:focus{border-color:var(--red);}
+.app-select{
+  width:100%;background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:12px 14px;
+  font-family:var(--font-b);font-size:14px;color:var(--black);
+  outline:none;cursor:pointer;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+}
+.app-textarea{
+  width:100%;background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--rs);padding:12px 14px;
+  font-family:var(--font-b);font-size:14px;color:var(--black);
+  outline:none;resize:none;min-height:90px;
+  transition:border-color 0.2s;-webkit-appearance:none;
+}
+.app-textarea:focus{border-color:var(--red);}
+.form-group{margin-bottom:1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ─── SCREEN 5: CONFIRMACIÓ ─── */
+#s5{background:var(--white);justify-content:center;align-items:center;text-align:center;padding:2rem;}
+.confirm-icon{
+  width:72px;height:72px;background:var(--red);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;
+}
+.confirm-title{
+  font-family:var(--font-d);font-weight:800;font-size:2rem;
+  text-transform:uppercase;letter-spacing:-0.02em;color:var(--black);
+  margin-bottom:0.5rem;
+}
+.confirm-title span{color:var(--red);}
+.confirm-sub{font-size:14px;color:var(--gray);line-height:1.6;margin-bottom:2rem;max-width:260px;margin-left:auto;margin-right:auto;}
+.confirm-card{
+  background:var(--off);border:1px solid var(--gray-lt);border-radius:var(--r);
+  padding:1rem 1.2rem;margin-bottom:2rem;text-align:left;
+}
+.confirm-card-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--gray-lt);}
+.confirm-card-row:last-child{border-bottom:none;}
+.confirm-card-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;}
+.confirm-card-val{font-size:13px;font-weight:600;color:var(--black);}
+.btn-home{
+  width:100%;background:var(--dark);color:white;border:none;
+  padding:14px;border-radius:var(--rs);
+  font-family:var(--font-d);font-weight:700;font-size:16px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.15s;
+}
+.btn-home:active{background:var(--black);}
+
+/* BOTTOM NAV (screens 1-3) */
+.bottom-nav{
+  display:flex;background:var(--white);
+  border-top:1px solid var(--gray-lt);
+  padding:8px 0 2px;flex-shrink:0;
+}
+.nav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;padding:4px 0;border:none;background:transparent;
+}
+.nav-tab-icon{
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  border-radius:6px;transition:background 0.15s;
+}
+.nav-tab.active .nav-tab-icon{background:var(--red-light);}
+.nav-tab.active svg{stroke:var(--red);}
+.nav-tab svg{stroke:#bbb;transition:stroke 0.15s;}
+.nav-tab-label{font-size:10px;color:#bbb;font-weight:600;letter-spacing:0.04em;transition:color 0.15s;}
+.nav-tab.active .nav-tab-label{color:var(--red);}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="phone">
+  <div class="notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="5" width="3" height="7" rx="1" opacity="0.3"/><rect x="4.5" y="3" width="3" height="9" rx="1" opacity="0.5"/><rect x="9" y="1" width="3" height="11" rx="1" opacity="0.7"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5.5C4.5 2 8 0.5 11 0.5s6.5 1.5 10 5"/><path d="M4 8.5C6.5 6 8.5 5 11 5s4.5 1 7 3.5"/><path d="M7.5 11.5C9 10 10 9.5 11 9.5s2 .5 3.5 2"/><circle cx="11" cy="14" r="1.5" fill="currentColor"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="21.5" y="3.5" width="2.5" height="5" rx="1.2" fill="currentColor" opacity="0.4"/><rect x="1.5" y="2.5" width="15" height="7" rx="1.5"/></svg>
+    </div>
+  </div>
+
+  <div class="screen-wrap">
+
+  <!-- ══ SCREEN 0: SPLASH ══ -->
+  <div class="screen active" id="s0">
+    <div class="splash-bg"></div>
+    <div class="splash-inner">
+      <div class="splash-logo-wrap">
+        <div class="splash-logo-box">
+          <span class="splash-logo-text">4.0</span>
+        </div>
+        <h1 class="splash-title">Districte<br><span>4.0</span><br>Obert</h1>
+        <p class="splash-sub">Descobreix les empreses del Districte i les oportunitats que t'esperen a Sants-Montjuïc.</p>
+      </div>
+      <div class="splash-tags">
+        <span class="splash-tag">Robòtica</span>
+        <span class="splash-tag">Impressió 3D</span>
+        <span class="splash-tag">IA industrial</span>
+        <span class="splash-tag">Mobilitat</span>
+        <span class="splash-tag">Manufactura</span>
+      </div>
+      <button class="btn-splash" onclick="goTo('s1')">Explorar el Districte →</button>
+    </div>
+    <div class="home-bar"><div class="home-bar-line"></div></div>
+  </div>
+
+  <!-- ══ SCREEN 1: MAP ══ -->
+  <div class="screen" id="s1">
+    <div class="map-topbar">
+      <div class="map-topbar-row1">
+        <div class="map-topbar-logo">4.0</div>
+        <span class="map-topbar-title">Districte 4.0 — Mapa</span>
+      </div>
+      <div class="map-search">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#bbb" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Cerca empresa o sector…" readonly>
+      </div>
+    </div>
+
+    <!-- MAP CANVAS with schematic of Zona Franca -->
+    <div class="map-canvas">
+      <svg class="map-svg" viewBox="0 0 390 480" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background -->
+        <rect width="390" height="480" fill="#eae9e4"/>
+        <!-- Grid subtle -->
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="390" height="480" fill="url(#grid)"/>
+
+        <!-- === ROAD NETWORK === -->
+        <!-- Av. Zona Franca (main vertical) -->
+        <rect x="175" y="0" width="18" height="480" fill="#d4d3d0"/>
+        <rect x="176" y="0" width="16" height="480" fill="#ccc"/>
+        <!-- Carrer Motors (horizontal top) -->
+        <rect x="0" y="58" width="390" height="14" fill="#d4d3d0"/>
+        <rect x="0" y="59" width="390" height="12" fill="#ccc"/>
+        <!-- Carrer 60 (mid horizontal) -->
+        <rect x="0" y="190" width="390" height="12" fill="#d4d3d0"/>
+        <rect x="0" y="191" width="390" height="10" fill="#ccc"/>
+        <!-- Carrer B (lower horizontal) -->
+        <rect x="0" y="330" width="390" height="12" fill="#d4d3d0"/>
+        <rect x="0" y="331" width="390" height="10" fill="#ccc"/>
+        <!-- Vertical secondary -->
+        <rect x="80" y="58" width="10" height="422" fill="#d8d7d4"/>
+        <rect x="290" y="58" width="10" height="272" fill="#d8d7d4"/>
+
+        <!-- === SECTOR BLOCKS === -->
+        <!-- Sector A (top-left of main av) -->
+        <rect x="10" y="74" width="160" height="110" rx="3" fill="#dedad4" stroke="#cbc9c3" stroke-width="0.8"/>
+        <!-- Sector BZ-1 (top-right) -->
+        <rect x="200" y="74" width="180" height="110" rx="3" fill="#dedad4" stroke="#cbc9c3" stroke-width="0.8"/>
+        <!-- Sector B (mid-left) -->
+        <rect x="10" y="206" width="160" height="118" rx="3" fill="#dedad4" stroke="#cbc9c3" stroke-width="0.8"/>
+        <!-- Sector C (mid-right / DFactory zone) -->
+        <rect x="200" y="206" width="180" height="118" rx="3" fill="#e2ddd6" stroke="#c8c5be" stroke-width="1" stroke-dasharray="4 2"/>
+        <!-- Sector lower-left -->
+        <rect x="10" y="346" width="160" height="120" rx="3" fill="#dedad4" stroke="#cbc9c3" stroke-width="0.8"/>
+        <!-- Port area (right lower) -->
+        <rect x="200" y="346" width="180" height="120" rx="3" fill="#d6dfe8" stroke="#b8c8d8" stroke-width="0.8"/>
+
+        <!-- DFactory Building highlight -->
+        <rect x="215" y="220" width="150" height="90" rx="4" fill="#e8ddd0" stroke="#E30613" stroke-width="1.5"/>
+        <text x="290" y="256" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="9" fill="#E30613" letter-spacing="1">DFACTORY</text>
+        <text x="290" y="268" text-anchor="middle" font-family="Barlow Condensed" font-weight="400" font-size="7.5" fill="#999" letter-spacing="0.5">Districte 4.0</text>
+
+        <!-- Mercabarna label area -->
+        <ellipse cx="45" cy="390" rx="30" ry="18" fill="#d2d0ca" stroke="#bbb" stroke-width="0.8"/>
+        <text x="45" y="394" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="7" fill="#888" letter-spacing="0.5">MERCABARNA</text>
+
+        <!-- Port water -->
+        <text x="330" y="395" text-anchor="middle" font-family="Barlow Condensed" font-weight="400" font-size="8" fill="#8aabcc" letter-spacing="1">PORT BCN</text>
+
+        <!-- Sector labels -->
+        <text x="50" y="125" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="8.5" fill="rgba(0,0,0,0.2)" letter-spacing="2">SECTOR A</text>
+        <text x="265" y="120" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="8.5" fill="rgba(0,0,0,0.2)" letter-spacing="2">SECTOR BZ-1</text>
+        <text x="50" y="260" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="8.5" fill="rgba(0,0,0,0.2)" letter-spacing="2">SECTOR B</text>
+        <text x="290" y="212" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="8" fill="rgba(227,6,19,0.35)" letter-spacing="2">SECTOR C · D4.0</text>
+
+        <!-- Street labels -->
+        <text x="184" y="54" text-anchor="middle" font-family="Barlow" font-weight="500" font-size="6" fill="#999" letter-spacing="0.3" transform="rotate(-90,184,54)" y="46" x="230">AV. ZONA FRANCA</text>
+        <text x="130" y="55" text-anchor="middle" font-family="Barlow" font-weight="500" font-size="6.5" fill="#999">C/ MOTORS</text>
+        <text x="130" y="188" text-anchor="middle" font-family="Barlow" font-weight="500" font-size="6.5" fill="#999">C/ 60</text>
+      </svg>
+
+      <!-- FILTER PILLS overlay -->
+      <div class="map-filters" style="top:8px;">
+        <div class="filter-pill active" onclick="filterPins('all',this)">Totes</div>
+        <div class="filter-pill" onclick="filterPins('robotica',this)">Robòtica</div>
+        <div class="filter-pill" onclick="filterPins('3d',this)">Impressió 3D</div>
+        <div class="filter-pill" onclick="filterPins('tech',this)">Tecnologia</div>
+        <div class="filter-pill" onclick="filterPins('movilitat',this)">Mobilitat</div>
+      </div>
+
+      <!-- COMPANY PINS -->
+      <!-- Robotnik -->
+      <div class="pin" data-cat="robotica" style="left:22%;top:38%" onclick="openEmpresa('robotnik')">
+        <div class="pin-bubble">Robotnik</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- AsorCAD -->
+      <div class="pin" data-cat="3d" style="left:60%;top:25%" onclick="openEmpresa('asorcad')">
+        <div class="pin-bubble">AsorCAD</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- Mastertec3D -->
+      <div class="pin" data-cat="3d" style="left:75%;top:32%" onclick="openEmpresa('mastertec')">
+        <div class="pin-bubble">Mastertec3D</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- PICVISA -->
+      <div class="pin" data-cat="tech" style="left:55%;top:48%" onclick="openEmpresa('picvisa')">
+        <div class="pin-bubble">PICVISA</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- Simumak -->
+      <div class="pin" data-cat="tech" style="left:72%;top:55%" onclick="openEmpresa('simumak')">
+        <div class="pin-bubble">Simumak</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- 9altitudes -->
+      <div class="pin" data-cat="tech" style="left:25%;top:55%" onclick="openEmpresa('9altitudes')">
+        <div class="pin-bubble">9altitudes</div>
+        <div class="pin-dot"></div>
+      </div>
+      <!-- Windforce -->
+      <div class="pin" data-cat="movilitat" style="left:42%;top:30%" onclick="openEmpresa('windforce')">
+        <div class="pin-bubble">Windforce</div>
+        <div class="pin-dot"></div>
+      </div>
+
+      <!-- LEGEND -->
+      <div class="map-legend">
+        <div class="legend-title">Sectors</div>
+        <div class="legend-row"><div class="legend-dot" style="background:#E30613"></div>Empreses D4.0</div>
+        <div class="legend-row"><div class="legend-dot" style="background:#8aabcc"></div>Port Barcelona</div>
+        <div class="legend-row"><div class="legend-dot" style="background:#c4c3c1"></div>Vials i accessos</div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-tab active">
+        <div class="nav-tab-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg></div>
+        <span class="nav-tab-label">Mapa</span>
+      </button>
+      <button class="nav-tab" onclick="goTo('s1list')">
+        <div class="nav-tab-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <span class="nav-tab-label">Empreses</span>
+      </button>
+      <button class="nav-tab" onclick="goTo('s0')">
+        <div class="nav-tab-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg></div>
+        <span class="nav-tab-label">Inici</span>
+      </button>
+    </div>
+    <div class="home-bar"><div class="home-bar-line"></div></div>
+  </div>
+
+  <!-- ══ SCREEN 2: EMPRESA DETAIL ══ -->
+  <div class="screen" id="s2">
+    <div class="empresa-topbar">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="empresa-topbar-title" id="e-topbar-name">Empresa</span>
+    </div>
+    <div class="empresa-scroll">
+      <div class="empresa-hero">
+        <div class="empresa-hero-bg"></div>
+        <div class="empresa-hero-logo" id="e-logo">EMPRESA</div>
+        <div class="empresa-sector-badge" id="e-sector-badge">Sector</div>
+      </div>
+      <div class="empresa-body">
+        <h2 class="empresa-name" id="e-name">Nom</h2>
+        <p class="empresa-tagline" id="e-tagline">Tagline</p>
+        <p class="empresa-desc" id="e-desc">Descripció</p>
+        <div class="empresa-info-grid">
+          <div class="info-chip"><div class="info-chip-label">Seu</div><div class="info-chip-val" id="e-seu">—</div></div>
+          <div class="info-chip"><div class="info-chip-label">Treballadors</div><div class="info-chip-val" id="e-workers">—</div></div>
+          <div class="info-chip"><div class="info-chip-label">Sector</div><div class="info-chip-val" id="e-sector">—</div></div>
+          <div class="info-chip"><div class="info-chip-label">Fundació</div><div class="info-chip-val" id="e-fundacio">—</div></div>
+        </div>
+        <div class="empresa-section-title">Oportunitats obertes</div>
+        <div id="e-oportunitats"></div>
+        <button class="btn-empresa" onclick="goTo('s3')">Veure totes les oportunitats →</button>
+      </div>
+    </div>
+    <div class="home-bar"><div class="home-bar-line"></div></div>
+  </div>
+
+  <!-- ══ SCREEN 3: OPORTUNITAT DETAIL ══ -->
+  <div class="screen" id="s3">
+    <div class="oport-topbar">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="empresa-topbar-title">Oportunitat</span>
+    </div>
+    <div class="oport-scroll">
+      <div class="oport-hero">
+        <div class="oport-hero-type" id="o-type">Pràctiques</div>
+        <div class="oport-hero-title" id="o-title">Títol</div>
+        <div class="oport-hero-company" id="o-company">Empresa · Districte 4.0</div>
+      </div>
+      <div class="oport-body">
+        <div class="oport-stat-row">
+          <div class="oport-stat"><div class="oport-stat-val" id="o-dur">6 sem</div><div class="oport-stat-lab">Durada</div></div>
+          <div class="oport-stat"><div class="oport-stat-val" id="o-comp">Beca</div><div class="oport-stat-lab">Compensació</div></div>
+          <div class="oport-stat"><div class="oport-stat-val" id="o-places">2</div><div class="oport-stat-lab">Places</div></div>
+        </div>
+        <div class="oport-desc-block">
+          <h4>Descripció</h4>
+          <p id="o-desc">Descripció de l'oportunitat.</p>
+        </div>
+        <div class="oport-desc-block">
+          <h4>Requisits</h4>
+          <ul id="o-req"><li>—</li></ul>
+        </div>
+        <div class="oport-desc-block">
+          <h4>Habilitats valorades</h4>
+          <div class="skill-row" id="o-skills"></div>
+        </div>
+        <button class="btn-apply" onclick="goTo('s4')">M'interessa aquesta oportunitat →</button>
+      </div>
+    </div>
+    <div class="home-bar"><div class="home-bar-line"></div></div>
+  </div>
+
+  <!-- ══ SCREEN 4: FORMULARI ══ -->
+  <div class="screen" id="s4">
+    <div class="form-topbar">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="empresa-topbar-title">Apunta't</span>
+    </div>
+    <div class="form-scroll">
+      <div class="form-inner">
+        <div class="form-banner">
+          <div class="form-banner-company" id="f-company-label">Empresa · Districte 4.0</div>
+          <div class="form-banner-title" id="f-oport-label">Oportunitat</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="app-label">Nom</label>
+            <input type="text" class="app-input" placeholder="El teu nom">
+          </div>
+          <div class="form-group">
+            <label class="app-label">Cognoms</label>
+            <input type="text" class="app-input" placeholder="Cognoms">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="app-label">Correu electrònic</label>
+          <input type="email" class="app-input" placeholder="nom@exemple.com">
+        </div>
+        <div class="form-group">
+          <label class="app-label">Perfil</label>
+          <select class="app-select">
+            <option>Estudiant CFGS / FP</option>
+            <option>Estudiant universitari</option>
+            <option>Professional en actiu</option>
+            <option>Emprenedor</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="app-label">Motivació (opcional)</label>
+          <textarea class="app-textarea" placeholder="Per què t'interessa aquesta oportunitat?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="app-label">CV / Portafoli (URL opcional)</label>
+          <input type="text" class="app-input" placeholder="linkedin.com/in/el-teu-perfil">
+        </div>
+        <button class="btn-apply" onclick="goTo('s5')">Enviar sol·licitud →</button>
+      </div>
+    </div>
+    <div class="home-bar"><div class="home-bar-line"></div></div>
+  </div>
+
+  <!-- ══ SCREEN 5: CONFIRMACIÓ ══ -->
+  <div class="screen" id="s5">
+    <div class="confirm-icon">
+      <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2 class="confirm-title">Sol·licitud<br><span>enviada!</span></h2>
+    <p class="confirm-sub">L'empresa del Districte 4.0 revisarà el teu perfil i et contactarà en els propers dies.</p>
+    <div class="confirm-card">
+      <div class="confirm-card-row">
+        <span class="confirm-card-label">Empresa</span>
+        <span class="confirm-card-val" id="c-company">—</span>
+      </div>
+      <div class="confirm-card-row">
+        <span class="confirm-card-label">Oportunitat</span>
+        <span class="confirm-card-val" id="c-oport">—</span>
+      </div>
+      <div class="confirm-card-row">
+        <span class="confirm-card-label">Estat</span>
+        <span class="confirm-card-val" style="color:#22c55e">En revisió ✓</span>
+      </div>
+    </div>
+    <button class="btn-home" onclick="goTo('s1')">← Tornar al mapa</button>
+    <div class="home-bar" style="margin-top:1.5rem;"><div class="home-bar-line" style="background:#1a1a1a;"></div></div>
+  </div>
+
+  </div><!-- /screen-wrap -->
+</div><!-- /phone -->
+</div><!-- /shell -->
+
+<script>
+const empreses = {
+  robotnik:{
+    name:'Robotnik',logo:'ROBOTNIK',sector:'Robòtica',tagline:'Robots mòbils autònoms per a indústria i logística',
+    desc:'Robotnik és una empresa referent en robòtica mòbil autònoma. Dissenyen i fabriquen robots per a entorns industrials, hospitalaris i logístics, amb presència a més de 30 països. Al Districte 4.0, el seu equip treballa en els últims models de navegació autònoma.',
+    seu:'Districte 4.0, BCN',workers:'85+',fundacio:'2002',
+    oportunitats:[
+      {type:'Pràctiques',title:'Programació de navegació autònoma',deadline:'15 mar',dur:'3 mesos',comp:'Beca 600€/m',places:'2',
+       desc:'Col·laboraràs amb l\'equip de software per implementar algorismes de navegació en robots RB-KAIROS en entorns industrials reals del Districte.',
+       req:['Python o C++ (nivell mitjà)','Coneixements bàsics de ROS','CFGS DAI, DAM o Enginyeria Electrònica'],
+       skills:['Python','ROS','Linux','Git','SLAM']},
+      {type:'TFG / TFC',title:'Visió artificial per a detecció d\'obstacles',deadline:'30 abr',dur:'6 mesos',comp:'Col·laboració',places:'1',
+       desc:'Projecte final de grau o cicle integrat en el departament de percepció. Implementació d\'un sistema de detecció d\'obstacles basat en xarxes neuronals per a robots de logística interior.',
+       req:['Python + OpenCV','Coneixements de Machine Learning','Grau en Enginyeria o CFGS DAI'],
+       skills:['OpenCV','PyTorch','Python','Docker']}
+    ]
+  },
+  asorcad:{
+    name:'AsorCAD',logo:'ASORCAD',sector:'Impressió 3D',tagline:'Solucions CAD i impressió 3D professional per a indústria',
+    desc:'AsorCAD ofereix serveis i productes en l\'àmbit del disseny assistit per ordinador i la fabricació additiva. Treballen amb empreses de la indústria aeronàutica, automobilística i mèdica, integrant tecnologies de prototipatge ràpid.',
+    seu:'Districte 4.0, BCN',workers:'30+',fundacio:'2008',
+    oportunitats:[
+      {type:'Freelance',title:'Disseny de peces per a client aeronàutic',deadline:'28 feb',dur:'6 setmanes',comp:'800€ total',places:'1',
+       desc:'Modelat de peces de fixació en Solidworks o Fusion 360 per a un prototip de component aeronàutic. Lliurament: fitxers STL optimitzats per impressió FDM.',
+       req:['Domini de SolidWorks o Fusion 360','Coneixements bàsics de materials','Disponibilitat immediata'],
+       skills:['SolidWorks','Fusion 360','FDM','STL']}
+    ]
+  },
+  mastertec:{
+    name:'Mastertec3D',logo:'MASTERTEC',sector:'Fabricació Additiva',tagline:'Impressió 3D industrial i postprocessat avançat',
+    desc:'Mastertec3D és especialista en fabricació additiva amb tecnologies SLS, FDM i resina per a prototipatge i producció de petites sèries. El seu laboratori al DFactory és un dels més equipats del sud d\'Europa.',
+    seu:'DFactory, Districte 4.0',workers:'20+',fundacio:'2015',
+    oportunitats:[
+      {type:'Pràctiques',title:'Operació d\'impressores SLS industrials',deadline:'15 mar',dur:'4 mesos',comp:'Beca 500€/m',places:'2',
+       desc:'Aprendràs a operar i mantenir les impressores SLS Formlabs i EOS del laboratori, preparar arxius per producció i gestionar el postprocessat de peces tècniques.',
+       req:['Interès en fabricació additiva','CFGS en fabricació o similar','Ordre i capacitat tècnica'],
+       skills:['SLS','FDM','Control de qualitat','CAD bàsic']}
+    ]
+  },
+  picvisa:{
+    name:'PICVISA',logo:'PICVISA',sector:'Visió Artificial',tagline:'Sistemes de visió artificial per a reciclatge i indústria',
+    desc:'PICVISA desenvolupa sistemes intel·ligents de visió artificial i robòtica per a la classificació de residus i el control de qualitat industrial. La seva tecnologia s\'utilitza en plantes de reciclatge de tot Europa.',
+    seu:'Districte 4.0, BCN',workers:'45+',fundacio:'2010',
+    oportunitats:[
+      {type:'TFG / TFC',title:'Model de classificació de residus amb IA',deadline:'10 abr',dur:'5 mesos',comp:'Suport académic',places:'1',
+       desc:'Entrenament d\'un model de xarxa neuronal convolucional per classificar residus plàstics en temps real sobre una línia de producció real al laboratori del Districte.',
+       req:['Python + PyTorch o TensorFlow','Interès en visió per computador','Grau en Enginyeria Informàtica o similar'],
+       skills:['Python','PyTorch','OpenCV','YOLO','Datasets']},
+      {type:'Pràctiques',title:'QA i proves de sistemes de visió',deadline:'28 mar',dur:'3 mesos',comp:'Beca 550€/m',places:'1',
+       desc:'Suport a l\'equip d\'enginyeria en les proves funcionals dels sistemes de detecció instal·lats en clients actius. Inclou visites a plantes de reciclatge.',
+       req:['Coneixements bàsics de programació','CFGS en sistemes o DAM','Metodologia i rigor'],
+       skills:['Testing','Python','Documentació','Linux']}
+    ]
+  },
+  simumak:{
+    name:'Simumak',logo:'SIMUMAK',sector:'Simulació',tagline:'Entrenadors de vol i simuladors industrials d\'alta fidelitat',
+    desc:'Simumak dissenya i fabrica simuladors d\'entrenament per a pilots, operadors de maquinària i professionals industrials. Utilitzen tecnologia VR i plataformes de moviment per crear experiències immersives de màxima fidelitat.',
+    seu:'Districte 4.0, BCN',workers:'60+',fundacio:'2006',
+    oportunitats:[
+      {type:'Pràctiques',title:'Desenvolupament d\'escenaris VR per a simulador',deadline:'20 mar',dur:'4 mesos',comp:'Beca 650€/m',places:'2',
+       desc:'Crearàs entorns 3D i escenaris d\'entrenament amb Unity3D per als nous simuladors d\'operadors de maquinària pesada. Col·laboració directa amb l\'equip de producte.',
+       req:['Unity3D o Unreal Engine (nivell basic-mig)','Interès en VR / simulació','CFGS DAW, DAM o Grau en disseny digital'],
+       skills:['Unity3D','C#','VR','3D Modeling','Git']}
+    ]
+  },
+  '9altitudes':{
+    name:'9altitudes',logo:'9ALTITUDES',sector:'Consultoria Tech',tagline:'Transformació digital i Industry 4.0 per a manufactura',
+    desc:'9altitudes és una consultora especialitzada en la transformació digital de les empreses manufactureres. Implementen solucions ERP, MES i IoT industrial per connectar fàbriques intel·ligents. Al Districte 4.0 gestionen projectes per a clients de tot Europa.',
+    seu:'Districte 4.0, BCN',workers:'200+',fundacio:'2011',
+    oportunitats:[
+      {type:'Pràctiques',title:'Analista de dades industrials IoT',deadline:'15 abr',dur:'6 mesos',comp:'Beca 700€/m',places:'3',
+       desc:'Formaràs part d\'un equip de projecte real, analitzant dades de sensors IoT de fàbriques clients. Crearàs dashboards, identificaràs anomalies i presentaràs resultats a l\'equip.',
+       req:['Python o Power BI (nivell mig)','Capacitat analítica','Grau en ADE, Enginyeria o CFGSS'],
+       skills:['Python','Power BI','SQL','Azure IoT','Excel']},
+      {type:'Freelance',title:'Disseny de presentació per a proposta client',deadline:'7 mar',dur:'2 setmanes',comp:'400€ total',places:'1',
+       desc:'Disseny professional d\'un deck de presentació en PowerPoint / Figma per a una proposta de transformació digital a un client del sector alimentari.',
+       req:['Domini de Figma o PowerPoint avançat','Bon gust visual','Disponibilitat immediata'],
+       skills:['Figma','PowerPoint','Storytelling','Disseny']}
+    ]
+  },
+  windforce:{
+    name:'Windforce',logo:'WINDFORCE',sector:'Energia',tagline:'Solucions d\'energia renovable i eficiència industrial',
+    desc:'Windforce desenvolupa sistemes de monitoratge i optimització energètica per a instal·lacions industrials i parcs eòlics. La seva plataforma analitza en temps real el consum i la producció d\'energia per reduir l\'empremta de carboni.',
+    seu:'Districte 4.0, BCN',workers:'35+',fundacio:'2013',
+    oportunitats:[
+      {type:'TFG / TFC',title:'Plataforma de monitoratge energètic web',deadline:'30 abr',dur:'5 mesos',comp:'Col·laboració + certificat',places:'1',
+       desc:'Desenvolupament d\'un dashboard web en temps real per visualitzar dades de consum energètic de les instal·lacions del Districte 4.0. Dades reals de l\'edifici DFactory.',
+       req:['React o Vue.js (nivell mig)','APIs REST i WebSockets','Grau en Enginyeria o CFGSS DAW'],
+       skills:['React','WebSockets','APIs','Chart.js','Node.js']}
+    ]
+  }
+};
+
+let currentEmpresa = null;
+let currentOport = null;
+let history = [];
+
+function goTo(screenId) {
+  const cur = document.querySelector('.screen.active');
+  if(cur) {
+    cur.classList.add('exit');
+    cur.classList.remove('active');
+    setTimeout(()=>cur.classList.remove('exit'),300);
+  }
+  history.push(cur ? cur.id : 's0');
+  const next = document.getElementById(screenId);
+  if(next) {
+    next.classList.add('active');
+    next.scrollTop = 0;
+    const scroll = next.querySelector('.empresa-scroll,.oport-scroll,.form-scroll');
+    if(scroll) scroll.scrollTop = 0;
+  }
+}
+
+function goBack() {
+  const prev = history.pop() || 's1';
+  const cur = document.querySelector('.screen.active');
+  if(cur){
+    cur.classList.remove('active');
+    cur.style.transform='translateX(40px)';
+    cur.style.opacity='0';
+    setTimeout(()=>{cur.style.transform='';cur.style.opacity='';},300);
+  }
+  const target = document.getElementById(prev);
+  if(target) target.classList.add('active');
+}
+
+function openEmpresa(id) {
+  currentEmpresa = empreses[id];
+  if(!currentEmpresa) return;
+  const e = currentEmpresa;
+  document.getElementById('e-topbar-name').textContent = e.name;
+  document.getElementById('e-logo').textContent = e.logo;
+  document.getElementById('e-sector-badge').textContent = e.sector;
+  document.getElementById('e-name').textContent = e.name;
+  document.getElementById('e-tagline').textContent = e.tagline;
+  document.getElementById('e-desc').textContent = e.desc;
+  document.getElementById('e-seu').textContent = e.seu;
+  document.getElementById('e-workers').textContent = e.workers;
+  document.getElementById('e-sector').textContent = e.sector;
+  document.getElementById('e-fundacio').textContent = e.fundacio;
+  const oDiv = document.getElementById('e-oportunitats');
+  oDiv.innerHTML = e.oportunitats.map((o,i)=>`
+    <div class="oport-card" onclick="openOportunitat(${i})">
+      <div class="oport-top">
+        <span class="oport-type">${o.type}</span>
+        <span class="oport-deadline">Fins ${o.deadline}</span>
+      </div>
+      <div class="oport-title">${o.title}</div>
+      <div class="oport-desc">${o.desc.substring(0,80)}…</div>
+      <div class="oport-tags">${o.skills.slice(0,3).map(s=>`<span class="oport-tag">${s}</span>`).join('')}</div>
+    </div>`).join('');
+  goTo('s2');
+}
+
+function openOportunitat(idx) {
+  const o = currentEmpresa.oportunitats[idx];
+  currentOport = o;
+  document.getElementById('o-type').textContent = o.type;
+  document.getElementById('o-title').textContent = o.title;
+  document.getElementById('o-company').textContent = currentEmpresa.name + ' · Districte 4.0';
+  document.getElementById('o-dur').textContent = o.dur;
+  document.getElementById('o-comp').textContent = o.comp;
+  document.getElementById('o-places').textContent = o.places;
+  document.getElementById('o-desc').textContent = o.desc;
+  document.getElementById('o-req').innerHTML = o.req.map(r=>`<li>${r}</li>`).join('');
+  document.getElementById('o-skills').innerHTML = o.skills.map(s=>`<span class="skill-chip">${s}</span>`).join('');
+  document.getElementById('f-company-label').textContent = currentEmpresa.name + ' · Districte 4.0';
+  document.getElementById('f-oport-label').textContent = o.title;
+  document.getElementById('c-company').textContent = currentEmpresa.name;
+  document.getElementById('c-oport').textContent = o.title;
+  goTo('s3');
+}
+
+function filterPins(cat, el) {
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.pin').forEach(p=>{
+    if(cat==='all'||p.dataset.cat===cat) p.style.opacity='1';
+    else p.style.opacity='0.2';
+  });
+}
+</script>
+</body>
+</html>

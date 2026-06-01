@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Districte 4.0 Obert — Consorci Zona Franca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E30613;
+    --red-dark: #b30510;
+    --black: #0a0a0a;
+    --near-black: #111111;
+    --dark: #1a1a1a;
+    --mid: #2e2e2e;
+    --gray: #555;
+    --light-gray: #e8e8e8;
+    --off-white: #f5f4f2;
+    --white: #ffffff;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 60px;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+    letter-spacing: -1px;
+  }
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cta {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--red-dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem 6rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow-line {
+    width: 40px;
+    height: 2px;
+    background: var(--red);
+  }
+  .hero-eyebrow-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title span { color: var(--red); }
+  .hero-subtitle {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #bbb;
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 1px solid #444;
+    padding: 14px 28px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid #222;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: var(--red);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--near-black);
+  }
+  .hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(227,6,19,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(227,6,19,0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-right-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+  }
+  .hero-tag {
+    background: rgba(227,6,19,0.12);
+    border: 1px solid rgba(227,6,19,0.3);
+    color: #ff6b6b;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    display: inline-block;
+  }
+  .hero-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 320px;
+  }
+  .hero-pill {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #ccc;
+    font-size: 12px;
+    padding: 7px 14px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .hero-pill:hover { border-color: var(--red); color: white; }
+  .hero-big-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 7rem;
+    line-height: 1;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  /* SECTION COMMONS */
+  section { padding: 6rem 5rem; }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.2rem;
+  }
+  .section-tag-line { width: 24px; height: 2px; background: var(--red); }
+  .section-tag-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-title span { color: var(--red); }
+  .section-lead {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #999;
+    max-width: 560px;
+    margin-bottom: 3rem;
+  }
+
+  /* SHARK TANK SECTION */
+  .shark-section {
+    background: var(--near-black);
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .shark-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .shark-episodes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+  .episode-card {
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .episode-card:hover { transform: scale(1.01); }
+  .episode-thumb {
+    aspect-ratio: 16/9;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .episode-thumb-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.06);
+  }
+  .ep-play {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .episode-card:hover .ep-play { transform: scale(1.1); background: var(--red-dark); }
+  .ep-play svg { margin-left: 3px; }
+  .episode-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--red);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+  }
+  .episode-info { padding: 1.2rem 1.4rem 1.5rem; }
+  .ep-num {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .ep-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .ep-desc {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .ep-result {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #4CAF50;
+    font-weight: 600;
+  }
+  .ep-result-dot { width: 6px; height: 6px; border-radius: 50%; background: #4CAF50; }
+  .ep-result.pending { color: #999; }
+  .ep-result.pending .ep-result-dot { background: #555; }
+
+  /* MICROPROJECTS SECTION */
+  .micro-section {
+    background: var(--black);
+  }
+  .micro-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .micro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #1e1e1e;
+    margin-bottom: 3rem;
+  }
+  .micro-card {
+    background: var(--near-black);
+    padding: 1.8rem;
+    transition: background 0.2s;
+  }
+  .micro-card:hover { background: #161616; }
+  .micro-company {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+  }
+  .micro-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .micro-sector {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: #1e1e1e;
+    color: #666;
+    padding: 3px 8px;
+  }
+  .micro-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.8rem;
+  }
+  .micro-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 1.4rem;
+  }
+  .micro-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.4rem;
+  }
+  .micro-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: #1a1a1a;
+    color: #aaa;
+    border: 1px solid #2a2a2a;
+  }
+  .micro-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #1e1e1e;
+  }
+  .micro-type {
+    font-size: 11px;
+    color: #4CAF50;
+    font-weight: 600;
+  }
+  .micro-deadline {
+    font-size: 11px;
+    color: #666;
+  }
+  .micro-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  /* FORM SECTION */
+  .form-section {
+    background: var(--near-black);
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .form-left { }
+  .form-points {
+    list-style: none;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .form-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.5;
+  }
+  .form-point-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .form-card {
+    background: var(--dark);
+    border: 1px solid #222;
+    padding: 2.5rem;
+  }
+  .form-group { margin-bottom: 1.4rem; }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="email"], select, textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    padding: 11px 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  input[type="text"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+    border-color: var(--red);
+  }
+  select { cursor: pointer; }
+  textarea { resize: vertical; min-height: 90px; }
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #aaa;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--red);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .form-submit {
+    width: 100%;
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+  .form-submit:hover { background: var(--red-dark); }
+
+  /* APP CTA SECTION */
+  .app-section {
+    background: var(--black);
+    text-align: center;
+    padding: 6rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .app-bg-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 16rem;
+    color: rgba(255,255,255,0.02);
+    letter-spacing: -0.05em;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .app-section-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .app-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .app-section .section-title { text-align: center; }
+  .app-section .section-lead { margin: 0 auto 2.5rem; text-align: center; }
+  .app-mockup-pills {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .app-pill {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    color: #ccc;
+    font-size: 12px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .app-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+
+  /* PODCAST SECTION */
+  .podcast-section {
+    background: var(--near-black);
+    border-top: 1px solid #1e1e1e;
+  }
+  .podcast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .podcast-card {
+    background: var(--dark);
+    border: 1px solid #222;
+    padding: 1.6rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .podcast-card:hover { border-color: var(--red); }
+  .podcast-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--red);
+    line-height: 1;
+    min-width: 48px;
+  }
+  .podcast-meta {
+    flex: 1;
+  }
+  .podcast-profession {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .podcast-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .podcast-desc {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.5;
+  }
+  .podcast-duration {
+    font-size: 11px;
+    color: #555;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--near-black);
+    border-top: 1px solid #1e1e1e;
+    padding: 3rem 5rem 2rem;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #1e1e1e;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .footer-brand { max-width: 300px; }
+  .footer-brand p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 0.8rem;
+  }
+  .footer-links-col h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+  .footer-links-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-links-col a {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links-col a:hover { color: var(--red); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-legal {
+    font-size: 12px;
+    color: #444;
+  }
+  .footer-czfb {
+    font-size: 12px;
+    color: #444;
+  }
+  .footer-czfb span { color: var(--red); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #1a1a1a;
+    border: 1px solid var(--red);
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 14px;
+    z-index: 999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--red);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-left > * {
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-eyebrow { animation-delay: 0.05s; }
+  .hero-title { animation-delay: 0.15s; }
+  .hero-subtitle { animation-delay: 0.25s; }
+  .hero-actions { animation-delay: 0.35s; }
+  .hero-stats { animation-delay: 0.45s; }
+
+  /* SUCCESS STATE */
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+  .form-success.show { display: block; }
+  .form-success-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+  .form-success h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .form-success p { font-size: 14px; color: #888; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">4.0</div>
+    <span class="nav-logo-text">Districte 4.0 Obert</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#shark-tank">Shark Tank</a></li>
+    <li><a href="#microprojectes">Microprojectes</a></li>
+    <li><a href="#podcast">Podcast</a></li>
+    <li><a href="#app">App</a></li>
+  </ul>
+  <a class="nav-cta" href="#uneix-te">Apunta't →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Consorci Zona Franca · Barcelona</span>
+    </div>
+    <h1 class="hero-title">
+      El Districte<br>
+      <span>4.0</span><br>
+      és teu
+    </h1>
+    <p class="hero-subtitle">
+      Connectem el talent local de Sants-Montjuïc amb les oportunitats reals de la indústria avançada. Pràctiques, projectes, concursos i molt més.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#microprojectes">Veure projectes →</a>
+      <a class="btn-outline" href="#shark-tank">Shark Tank 4.0</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Empreses al Districte</div>
+      </div>
+      <div>
+        <div class="stat-num">180k</div>
+        <div class="stat-label">Habitants Sants-Montjuïc</div>
+      </div>
+      <div>
+        <div class="stat-num">×3</div>
+        <div class="stat-label">Ampliació prevista 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-bg"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-right-content">
+      <span class="hero-tag">Ecosistema actiu</span>
+      <div class="hero-pill-group">
+        <div class="hero-pill">Robòtica avançada</div>
+        <div class="hero-pill">Intel·ligència artificial</div>
+        <div class="hero-pill">Fabricació additiva</div>
+        <div class="hero-pill">Ciberseguretat</div>
+        <div class="hero-pill">IoT industrial</div>
+        <div class="hero-pill">Sostenibilitat 4.0</div>
+        <div class="hero-pill">Logística intel·ligent</div>
+        <div class="hero-pill">Digital Twin</div>
+      </div>
+    </div>
+    <div class="hero-big-num">4.0</div>
+  </div>
+</section>
+
+<!-- SHARK TANK -->
+<section class="shark-section" id="shark-tank">
+  <div class="shark-header">
+    <div>
+      <div class="section-tag">
+        <div class="section-tag-line"></div>
+        <span class="section-tag-text">Competició de talent</span>
+      </div>
+      <h2 class="section-title">Shark Tank <span>4.0</span></h2>
+      <p class="section-lead">Joves de Sants-Montjuïc presenten els seus projectes a inversors i empreses del Districte. Les millors idees reben mentoria i finançament real.</p>
+    </div>
+    <a class="btn-outline" href="https://youtube.com" target="_blank">Veure canal YouTube →</a>
+  </div>
+  <div class="shark-episodes">
+
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <div class="episode-thumb-inner">EP1</div>
+        <div class="episode-badge">Emès</div>
+        <div class="ep-play">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div class="episode-info">
+        <div class="ep-num">Episodi 01 · Edició 2024</div>
+        <div class="ep-title">UrbanBot: robòtica de neteja urbana</div>
+        <div class="ep-desc">Tres estudiants de l'IES Zona Franca presenten un robot autònom per a la neteja de carrers industrials.</div>
+        <div class="ep-result"><span class="ep-result-dot"></span> Guanyador · 8.000 € de mentoria</div>
+      </div>
+    </div>
+
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <div class="episode-thumb-inner">EP2</div>
+        <div class="episode-badge">Emès</div>
+        <div class="ep-play">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div class="episode-info">
+        <div class="ep-num">Episodi 02 · Edició 2024</div>
+        <div class="ep-title">GreenTrack: traçabilitat sostenible</div>
+        <div class="ep-desc">Plataforma de seguiment de petjada de carboni per a PIMES del polígon, desenvolupada per dos graduats en FP.</div>
+        <div class="ep-result"><span class="ep-result-dot"></span> Finalista · Incorporat a SEAT:CODE</div>
+      </div>
+    </div>
+
+    <div class="episode-card">
+      <div class="episode-thumb">
+        <div class="episode-thumb-inner">EP3</div>
+        <div class="episode-badge" style="background:#333;color:#999;">Pròximament</div>
+        <div class="ep-play" style="background:#333;">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div class="episode-info">
+        <div class="ep-num">Episodi 03 · Edició 2025</div>
+        <div class="ep-title">Edició 2025 — Convocatòria oberta</div>
+        <div class="ep-desc">Tens un projecte tecnològic? Presenta'l al Shark Tank 4.0 i opta a mentoria, visibilitat i connexió directa amb inversors.</div>
+        <div class="ep-result pending"><span class="ep-result-dot"></span> Inscripcions obertes fins al 30 abril</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MICROPROJECTES -->
+<section class="micro-section" id="microprojectes">
+  <div class="micro-header">
+    <div>
+      <div class="section-tag">
+        <div class="section-tag-line"></div>
+        <span class="section-tag-text">Borsa de col·laboració</span>
+      </div>
+      <h2 class="section-title">Micro<span>projectes</span></h2>
+      <p class="section-lead">Les empreses del Districte publiquen necessitats concretes que talent local pot resoldre. El primer pas per treballar a la indústria 4.0.</p>
+    </div>
+    <a class="btn-outline" href="#uneix-te">Proposa el teu projecte →</a>
+  </div>
+  <div class="micro-grid">
+
+    <div class="micro-card">
+      <div class="micro-company">
+        <span class="micro-logo">SEAT:CODE</span>
+        <span class="micro-sector">Mobilitat</span>
+      </div>
+      <h3 class="micro-title">Dashboard de dades de flota connectada</h3>
+      <p class="micro-desc">Necessitem un panell de visualització en temps real per a dades de telemetria de vehicles elèctrics. Tecnologies: React, WebSockets, APIs REST.</p>
+      <div class="micro-tags">
+        <span class="micro-tag">React</span>
+        <span class="micro-tag">Data viz</span>
+        <span class="micro-tag">APIs REST</span>
+        <span class="micro-tag">6 setmanes</span>
+      </div>
+      <div class="micro-meta">
+        <span class="micro-type">✓ TFG / Pràctiques</span>
+        <span class="micro-deadline">Tancament: 15 mar</span>
+      </div>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-company">
+        <span class="micro-logo">Accenture</span>
+        <span class="micro-sector">Consultoria tech</span>
+      </div>
+      <h3 class="micro-title">Anàlisi de processos logístics amb IA</h3>
+      <p class="micro-desc">Identificar colls d'ampolla en cadenes de subministrament d'un client del sector alimentari usant tècniques de process mining i ML.</p>
+      <div class="micro-tags">
+        <span class="micro-tag">Python</span>
+        <span class="micro-tag">Machine Learning</span>
+        <span class="micro-tag">Process mining</span>
+        <span class="micro-tag">8 setmanes</span>
+      </div>
+      <div class="micro-meta">
+        <span class="micro-type">✓ Freelance / Beca</span>
+        <span class="micro-deadline">Tancament: 28 feb</span>
+      </div>
+    </div>
+
+    <div class="micro-card">
+      <div class="micro-company">
+        <span class="micro-logo">DFactory</span>
+        <span class="micro-sector">Fabricació 4.0</span>
+      </div>
+      <h3 class="micro-title">Identitat visual per a nou espai maker</h3>
+      <p class="micro-desc">Disseny de la identitat gràfica (logo, cartelleria, web one-page) per a la nova zona oberta de fabricació col·laborativa del DFactory.</p>
+      <div class="micro-tags">
+        <span class="micro-tag">Disseny gràfic</span>
+        <span class="micro-tag">Branding</span>
+        <span class="micro-tag">Web</span>
+        <span class="micro-tag">4 setmanes</span>
+      </div>
+      <div class="micro-meta">
+        <span class="micro-type">✓ Freelance remunerat</span>
+        <span class="micro-deadline">Tancament: 10 mar</span>
+      </div>
+    </div>
+
+  </div>
+  <div class="micro-cta-row">
+    <a class="btn-primary" href="#uneix-te">Apunta'm a un projecte →</a>
+    <a class="btn-outline" href="#uneix-te">Sóc empresa i vull publicar</a>
+  </div>
+</section>
+
+<!-- PODCAST -->
+<section class="podcast-section" id="podcast">
+  <div class="section-tag">
+    <div class="section-tag-line"></div>
+    <span class="section-tag-text">Veus del districte</span>
+  </div>
+  <h2 class="section-title">Podcast <span>& xarxes</span></h2>
+  <p class="section-lead">Professionals reals del Districte expliquen el seu camí, el seu rol i com va ser entrar a la indústria 4.0. En format curt, directe i sense filtre.</p>
+  <div class="podcast-grid">
+
+    <div class="podcast-card">
+      <div class="podcast-num">01</div>
+      <div class="podcast-meta">
+        <div class="podcast-profession">Enginyera de dades · SEAT:CODE</div>
+        <div class="podcast-title">"Vaig entrar fent pràctiques de CFGS"</div>
+        <div class="podcast-desc">La Marta explica com va passar de l'FP de DAM a liderar l'equip de pipelines de dades de vehicles connectats en menys de tres anys.</div>
+        <div class="podcast-duration">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#555" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          18 min
+        </div>
+      </div>
+    </div>
+
+    <div class="podcast-card">
+      <div class="podcast-num">02</div>
+      <div class="podcast-meta">
+        <div class="podcast-profession">Tècnic de robòtica · Ficosa</div>
+        <div class="podcast-title">"Ningú em va explicar que això existia"</div>
+        <div class="podcast-desc">En Jordi va créixer al barri de la Zona Franca sense saber que a cinc minuts de casa seva hi havia robots industrials que necessitaven programadors.</div>
+        <div class="podcast-duration">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#555" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          22 min
+        </div>
+      </div>
+    </div>
+
+    <div class="podcast-card">
+      <div class="podcast-num">03</div>
+      <div class="podcast-meta">
+        <div class="podcast-profession">Dissenyadora UX · DFactory</div>
+        <div class="podcast-title">"El Districte no és per a enginyers, és per a tothom"</div>
+        <div class="podcast-desc">La Fatima va fer un curs de disseny online i avui treballa creant interfícies per a maquinària industrial. Parlem de bretxes i de com saltar-les.</div>
+        <div class="podcast-duration">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#555" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          15 min
+        </div>
+      </div>
+    </div>
+
+    <div class="podcast-card">
+      <div class="podcast-num">04</div>
+      <div class="podcast-meta">
+        <div class="podcast-profession">Emprenedor · Startup DFactory</div>
+        <div class="podcast-title">"Vam néixer al Shark Tank i ara tenim 4 clients"</div>
+        <div class="podcast-desc">En Karim explica com el concurs va canviar el rumb del seu projecte de monitoratge industrial i quins recursos del Districte els van ajudar a escalar.</div>
+        <div class="podcast-duration">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#555" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          26 min
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- APP CTA -->
+<section class="app-section" id="app">
+  <div class="app-bg-text">APP</div>
+  <div class="app-section-inner">
+    <div class="app-icon">
+      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8">
+        <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+      </svg>
+    </div>
+    <div class="section-tag" style="justify-content:center">
+      <div class="section-tag-line"></div>
+      <span class="section-tag-text">Eina interactiva</span>
+    </div>
+    <h2 class="section-title">Explora el <span>Districte</span></h2>
+    <p class="section-lead">Descobreix les empreses que hi ha al Districte 4.0, les seves activitats i com pots connectar-hi, tot des del teu mòbil.</p>
+    <div class="app-mockup-pills">
+      <div class="app-pill"><span class="app-pill-dot"></span> Mapa interactiu</div>
+      <div class="app-pill"><span class="app-pill-dot"></span> Fitxes d'empresa</div>
+      <div class="app-pill"><span class="app-pill-dot"></span> Oportunitats obertes</div>
+      <div class="app-pill"><span class="app-pill-dot"></span> Ruta guiada</div>
+    </div>
+    <a class="btn-primary" href="#" onclick="alert('Aquí s\'obriria el mockup interactiu de l\'app de recorregut del Districte 4.0'); return false;" style="margin: 0 auto; display: inline-flex;">
+      Obrir app de recorregut →
+    </a>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="uneix-te">
+  <div class="form-layout">
+    <div class="form-left">
+      <div class="section-tag">
+        <div class="section-tag-line"></div>
+        <span class="section-tag-text">Uneix-te a l'ecosistema</span>
+      </div>
+      <h2 class="section-title">Apunta't<br>ara <span>mateix</span></h2>
+      <p class="section-lead">Tant si ets estudiant, professional o emprenedor, hi ha un lloc per a tu al Districte 4.0.</p>
+      <ul class="form-points">
+        <li class="form-point"><div class="form-point-dot"></div><span>Accés anticipat als microprojectes publicats per les empreses</span></li>
+        <li class="form-point"><div class="form-point-dot"></div><span>Notificació per al proper Shark Tank 4.0</span></li>
+        <li class="form-point"><div class="form-point-dot"></div><span>Invitació a les jornades de portes obertes del DFactory</span></li>
+        <li class="form-point"><div class="form-point-dot"></div><span>Newsletter mensual amb oportunitats i notícies del Districte</span></li>
+      </ul>
+    </div>
+    <div class="form-right">
+      <div class="form-card">
+        <div id="form-content">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" id="f-nom" placeholder="El teu nom">
+            </div>
+            <div class="form-group">
+              <label>Cognoms</label>
+              <input type="text" id="f-cog" placeholder="Els teus cognoms">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Correu electrònic</label>
+            <input type="email" id="f-email" placeholder="nom@exemple.com">
+          </div>
+          <div class="form-group">
+            <label>Perfil</label>
+            <select id="f-perfil">
+              <option value="">Selecciona el teu perfil</option>
+              <option>Estudiant FP / CFGS</option>
+              <option>Estudiant universitari</option>
+              <option>Professional en actiu</option>
+              <option>Emprenedor / Startup</option>
+              <option>Empresa del Districte</option>
+              <option>Entitat del barri</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>M'interessa</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label"><input type="checkbox" checked> Microprojectes i pràctiques</label>
+              <label class="checkbox-label"><input type="checkbox"> Shark Tank 4.0</label>
+              <label class="checkbox-label"><input type="checkbox"> Jornades de portes obertes</label>
+              <label class="checkbox-label"><input type="checkbox"> Newsletter del Districte</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Explica'ns breument el teu interès (opcional)</label>
+            <textarea id="f-msg" placeholder="Tinc un projecte sobre... / M'interessa connectar amb empreses de..."></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Enviar inscripció →</button>
+        </div>
+        <div class="form-success" id="form-success">
+          <div class="form-success-icon">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <h3>Inscripció rebuda!</h3>
+          <p>Ens posarem en contacte amb tu aviat.<br>Benvingut/da a l'ecosistema del Districte 4.0.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:0.8rem;">
+        <div class="nav-logo-mark">4.0</div>
+        <span class="nav-logo-text">Districte 4.0 Obert</span>
+      </div>
+      <p>Una iniciativa del Consorci de la Zona Franca de Barcelona per connectar el talent local amb la indústria avançada.</p>
+    </div>
+    <div class="footer-links-col">
+      <h4>Plataforma</h4>
+      <ul>
+        <li><a href="#shark-tank">Shark Tank 4.0</a></li>
+        <li><a href="#microprojectes">Microprojectes</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#app">App de recorregut</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-col">
+      <h4>Consorci ZF</h4>
+      <ul>
+        <li><a href="https://zfbarcelona.es" target="_blank">Web oficial</a></li>
+        <li><a href="https://zfbarcelona.es/ca/innovacio/districte-4-0/" target="_blank">DFactory Barcelona</a></li>
+        <li><a href="#">Contacte</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-col">
+      <h4>Xarxes socials</h4>
+      <ul>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-legal">© 2025 Districte 4.0 Obert — Prototip acadèmic · Metrópolis FPLab</span>
+    <span class="footer-czfb">Una iniciativa de <span>Consorci Zona Franca Barcelona</span></span>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-title">Gràcies!</div>
+  <div>Inscripció registrada correctament.</div>
+</div>
+
+<script>
+function submitForm() {
+  const nom = document.getElementById('f-nom').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const perfil = document.getElementById('f-perfil').value;
+  if (!nom || !email || !perfil) {
+    alert('Si us plau, omple els camps obligatoris: nom, correu i perfil.');
+    return;
+  }
+  document.getElementById('form-content').style.display = 'none';
+  document.getElementById('form-success').classList.add('show');
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
